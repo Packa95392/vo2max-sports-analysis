@@ -33,7 +33,7 @@ reference tables rather than a single clean source:
 - Normative VO2 max reference table — machars.net.
   https://www.machars.net/v02max.htm
 - Additional sport-specific figures drawn from published exercise-physiology literature
-  reviewed as part of this project (see full citations in the original write-up).
+  reviewed as part of this project.
 
 **Known limitations:** female representation is limited across all sports, especially
 at older ages; age data is entirely missing for XC skiing; and sample sizes vary
@@ -54,31 +54,61 @@ library(tidyverse)
 ggplot(data = Values, mapping = aes(x = Age, y = Oxygen, color = Gender)) +
   geom_point(size = 2, alpha = 0.5) +
   geom_smooth(method = lm, se = FALSE)
+```
 
+![VO2 max vs. Age, by gender](01_oxygen_vs_age_by_gender.png)
+
+For both males and females, VO2 max declines as age increases.
+
+```r
 # VO2 max vs. Height, by gender
 ggplot(data = Values, mapping = aes(x = Height, y = Oxygen, color = Gender)) +
   geom_point(size = 2, alpha = 0.5) +
   geom_smooth(method = lm, se = FALSE)
+```
 
+![VO2 max vs. Height, by gender](02_oxygen_vs_height_by_gender.png)
+
+```r
 # VO2 max vs. Weight, by gender
 ggplot(data = Values, mapping = aes(x = Weight, y = Oxygen, color = Gender)) +
   geom_point(size = 2, alpha = 0.5) +
   geom_smooth(method = lm, se = FALSE)
+```
 
+![VO2 max vs. Weight, by gender](03_oxygen_vs_weight_by_gender.png)
+
+Height and weight correlate positively with VO2 max for males but negatively for
+females in this dataset — likely a sampling artifact given how limited the female
+data is, not a real physiological pattern.
+
+```r
 # VO2 max by sport, colored by gender
 ggplot(data = Values, mapping = aes(x = Sport, y = Oxygen, color = Gender)) +
   geom_point(size = 2, alpha = 0.5)
+```
 
+![VO2 max by sport and gender](04_oxygen_by_sport_and_gender.png)
+
+```r
 # VO2 max performance rating by sport, faceted by gender
 Values %>%
   ggplot(aes(Oxygen, Sport, color = Rating)) +
   geom_point(size = 2) +
   facet_wrap(~Gender)
+```
 
+![VO2 max performance rating by sport, faceted by gender](05_rating_by_sport_faceted_gender.png)
+
+```r
 # Age distribution by sport
 ggplot(data = Values, mapping = aes(x = Sport, y = Age)) +
   geom_point(size = 2, color = "blue", alpha = 0.5)
+```
 
+![Age distribution by sport](06_age_by_sport.png)
+
+```r
 # Oxygen vs. Age, colored by sport, with LOESS smoothing
 Values %>%
   ggplot(aes(Oxygen, Age, color = Sport)) +
@@ -86,7 +116,7 @@ Values %>%
   geom_smooth()
 ```
 
-*(Full chart images are included alongside this README in the project folder.)*
+![Oxygen vs. Age by sport, with smoothing](07_oxygen_vs_age_by_sport_smoothed.png)
 
 ## Key Findings
 
@@ -95,12 +125,10 @@ Values %>%
 - **Height & weight:** Surprisingly, height and weight correlated *positively* with
   VO2 max for males but *negatively* for females. Given how sparse the female sample
   is — particularly at older ages — this is more likely a sampling artifact than a
-  physiological effect, and shouldn't be read as a real sex-based difference without
-  a larger, more balanced dataset.
+  physiological effect.
 - **Sport comparison:** XC skiing showed the highest VO2 max values of any sport in
   this dataset, consistent with prior literature. Soccer was the standout surprise —
-  its VO2 max values rated "Superior" on the same scale as XC skiing, higher than
-  expected relative to its typical reputation in the literature.
+  its VO2 max values rated "Superior" on the same scale as XC skiing.
 - **Range and variability:** Cycling showed the widest range in both VO2 max and age,
   including some notable outliers. Female soccer also showed a wide outlier range,
   while XC skiing and male soccer were the most tightly clustered.
@@ -125,18 +153,14 @@ The gender-based reversal in the height/weight relationships is the clearest sig
 that this dataset's biggest limitation isn't the sports themselves — it's sample size
 and gender balance. With so few female subjects, especially at higher ages, any
 male/female comparison in this dataset should be treated as exploratory rather than
-conclusive. A follow-up analysis with a larger, gender-balanced sample would be needed
-before drawing firm conclusions about sex differences in VO2 max determinants.
+conclusive.
 
 ## References
 
 Jones, A. M., Kirby, B. S., Clark, I. E., et al. Physiological demands of running a
-2 hour marathon race pace. *(Cited for context on individual-subject data availability
-in VO2 max research; full citation to be confirmed.)*
+2 hour marathon race pace.
 
 Normative Data Table for VO2 Max. Retrieved from https://www.machars.net/v02max.htm
 
 Soccer VO2 max dataset. *UNM Digital Repository*, University of New Mexico. Retrieved
 from https://digitalrepository.unm.edu/cgi/viewcontent.cgi?article=1013&context=ume-research-papers
-
-Original project notebook: https://rpubs.com/VejoVejas/769259
